@@ -25,7 +25,7 @@ export const useOrderStore = defineStore("orderStore", {
             this.loading = true;
             try {
                 const response = await axios.post("/api/orders", orderData);
-                this.orders.push(response.data);
+                this.orders.push(response.data?.order);
             } catch (error) {
                 this.error = error;
             } finally {
@@ -36,7 +36,10 @@ export const useOrderStore = defineStore("orderStore", {
         async updateOrder(id, orderData) {
             this.loading = true;
             try {
-                const response = await axios.put(`/api/orders/${id}`, orderData);
+                const response = await axios.put(
+                    `/api/orders/${id}`,
+                    orderData
+                );
                 const index = this.orders.findIndex((order) => order.id === id);
                 if (index !== -1) {
                     this.orders[index] = response.data;

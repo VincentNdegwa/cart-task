@@ -51,6 +51,8 @@ export const useCartStore = defineStore("cartStore", {
             }
         },
         async updateCartQuantity(userId, productId, change) {
+            this.loading = true;
+
             try {
                 const response = await axios.post(
                     `/api/cart/${userId}/update`,
@@ -63,6 +65,8 @@ export const useCartStore = defineStore("cartStore", {
                 this.cart = Object.values(response.data.cart);
             } catch (error) {
                 console.error("Failed to update cart:", error);
+            } finally {
+                this.loading = false;
             }
         },
     },

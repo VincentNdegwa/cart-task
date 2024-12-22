@@ -1,6 +1,10 @@
 <template>
     <AuthenticatedLayout>
-        <div class="container mx-auto p-4">
+        <LoadingUI v-if="orderStore.loading" />
+        <div
+            v-if="orderStore?.orders?.length > 0"
+            class="container mx-auto p-4"
+        >
             <div>
                 <OrderCard
                     v-for="order in orderStore.orders"
@@ -9,6 +13,8 @@
                 />
             </div>
         </div>
+
+        <NoData v-else message="No orders available." />
     </AuthenticatedLayout>
 
     <Head title="Orders" />
@@ -20,6 +26,8 @@ import { useOrderStore } from "@/store/orderStore";
 import { onMounted, computed } from "vue";
 import { Head, usePage } from "@inertiajs/vue3";
 import OrderCard from "@/Components/Cart/OrderCard.vue";
+import NoData from "@/Components/Cart/NoData.vue";
+import LoadingUI from "@/Components/LoadingUI.vue";
 
 export default {
     name: "Orders",
@@ -27,6 +35,8 @@ export default {
         AuthenticatedLayout,
         OrderCard,
         Head,
+        NoData,
+        LoadingUI,
     },
     data() {
         return {

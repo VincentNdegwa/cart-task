@@ -1,17 +1,21 @@
 v
 <script>
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
-import { Head, usePage } from "@inertiajs/vue3";
+import { Head, router, usePage } from "@inertiajs/vue3";
 import { useProductStore } from "@/store/productStore";
 import { computed, onMounted } from "vue";
 import Products from "@/Components/Cart/Products.vue";
 import { useCartStore } from "@/store/cartStore";
+import NoData from "@/Components/Cart/NoData.vue";
+import LoadingUI from "@/Components/LoadingUI.vue";
 
 export default {
     components: {
         AuthenticatedLayout,
         Head,
         Products,
+        NoData,
+        LoadingUI,
     },
     setup() {
         const productStore = useProductStore();
@@ -29,6 +33,9 @@ export default {
                 ...product,
                 quantity: 1,
             });
+            if (!cartStore.error) {
+                router.visit(route("cart"));
+            }
         };
 
         onMounted(async () => {
@@ -37,6 +44,7 @@ export default {
 
         return {
             productStore,
+            cartStore,
             fetchProducts,
             userId,
             addToCart,
@@ -57,7 +65,9 @@ export default {
     <Head title="Dashboard" />
 
     <AuthenticatedLayout>
+        <LoadingUI v-if="productStore.loading || cartStore.loading" />
         <div
+            v-else-if="productStore.products.length > 0"
             class="overflow-hidden bg-white shadow-sm sm:rounded-lg p-6 flex flex-wrap"
         >
             <Products
@@ -68,5 +78,6 @@ export default {
                 class="mb-4"
             />
         </div>
+        <NoData v-else message="No products available." />
     </AuthenticatedLayout>
 </template>

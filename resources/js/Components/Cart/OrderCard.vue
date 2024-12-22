@@ -23,7 +23,7 @@
                     {{ new Date(order.created_at).toLocaleDateString() }}
                 </p>
             </div>
-            <div v-if="order.order_products.length">
+            <div v-if="order.order_products?.length">
                 <h3 class="font-semibold text-gray-800 mb-2">Products:</h3>
                 <ul class="space-y-2">
                     <li

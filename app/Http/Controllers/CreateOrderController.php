@@ -46,10 +46,16 @@ class CreateOrderController extends Controller
 
             DB::commit();
 
+            $newOrder =
+                Order::where('id', $order->id)
+                ->with('orderProducts.product')
+                ->get();
+
+
             $cartKey = "cart:{$validatedData['user_id']}";
             Redis::del($cartKey);
 
-            return response()->json(['message' => 'Order created successfully', 'order' => $order], 201);
+            return response()->json(['message' => 'Order created successfully', 'order' => $newOrder], 201);
         } catch (\Exception $e) {
             DB::rollBack();
             return response()->json(['message' => 'Order creation failed', 'error' => $e->getMessage()], 500);

@@ -1,7 +1,7 @@
 <template>
     <AuthenticatedLayout>
-        <div class="cart-view p-6 bg-gray-100 min-h-screen">
-            <h1 class="text-3xl font-bold mb-6">Shopping Cart</h1>
+        <LoadingUI v-if="cartStore.loading" />
+        <div v-else class="cart-view p-6 bg-gray-100 min-h-screen">
             <div v-if="cartStore?.cart?.length > 0">
                 <div
                     v-for="product in cartStore.cart"
@@ -56,15 +56,15 @@
                     </button>
                 </div>
             </div>
-            <div v-else>
-                <p class="text-gray-600">Your cart is empty.</p>
-            </div>
+            <NoData message="No products in cart" v-else />
         </div>
     </AuthenticatedLayout>
     <Head title="Cart" />
 </template>
 
 <script>
+import NoData from "@/Components/Cart/NoData.vue";
+import LoadingUI from "@/Components/LoadingUI.vue";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import { useCartStore } from "@/store/cartStore";
 import { useOrderStore } from "@/store/orderStore";
@@ -75,6 +75,8 @@ export default {
     components: {
         AuthenticatedLayout,
         Head,
+        NoData,
+        LoadingUI,
     },
     setup() {
         const cartStore = useCartStore();
