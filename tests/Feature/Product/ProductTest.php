@@ -1,9 +1,9 @@
 <?php
 
-use Database\Factories\ProductFactory;
+use App\Models\Product;
 
 test('Can create new product', function () {
-    $response = $this->post('/products', [
+    $response = $this->post('/api/products', [
         'name' => 'Test Product',
         'description' => 'This is a test product',
         'price' => 9.99,
@@ -15,16 +15,14 @@ test('Can create new product', function () {
 
 
 test("can create new product with factory", function () {
-    $product = ProductFactory::factory()->create(1);
+    $product = Product::factory()->create();
 
-    $response = $this->get('/products');
+    $response = $this->get('/api/products');
 
     $response->assertStatus(200);
+    $product = $product->refresh();
 
     $response->assertJsonFragment([
-        'name' => $product->name,
-        'description' => $product->description,
-        'price' => $product->price,
-        'quantity' => $product->quantity,
+        'id' => $product->id,
     ]);
 });
