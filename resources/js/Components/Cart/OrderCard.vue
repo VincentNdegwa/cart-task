@@ -1,12 +1,12 @@
 <template>
-    <div class="shadow-xl rounded-lg overflow-hidden mb-6">
+    <div class="border-b-2 rounded-lg overflow-hidden mb-6">
         <div class="p-6">
             <div class="flex justify-between items-center mb-4">
                 <h2 class="text-xl font-bold text-indigo-600">
                     Order #{{ order.id }}
                 </h2>
                 <span
-                    class="status-badge px-3 py-1 text-sm font-medium rounded-full"
+                    class="status-badge px-3 py-1 text-sm font-medium rounded-full uppercase"
                     :class="statusClass(order.status)"
                 >
                     {{ order.status }}
@@ -42,11 +42,17 @@
             <div v-else class="mt-4 text-gray-500 text-center">
                 No products in this order.
             </div>
+
+            <div class="footer flex mt-5">
+                <!-- <CustomButton> Cancel Order </CustomButton> -->
+            </div>
         </div>
     </div>
 </template>
 
 <script>
+import CustomButton from "./CustomButton.vue";
+
 export default {
     name: "OrderCard",
     props: {
@@ -68,6 +74,9 @@ export default {
                     return "bg-gray-100 text-gray-600";
             }
         },
+    },
+    components: {
+        CustomButton,
     },
 };
 </script>
